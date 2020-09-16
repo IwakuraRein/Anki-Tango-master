@@ -9,15 +9,11 @@ for i in lines:
     heads.append(Match.group(1))
     tails.append(Match.group(2))
 
-#print(heads)
-#print(tails)
-#print()
 results=''
 for index, t in enumerate(tails):
     explains=[]
     examples=[]
     if re.search(r'(（[1-9]）|[Ⅰ-Ⅹ])', t):
-        print('hello')
         examples=re.split(r'((?:（[1-9]）|[Ⅰ-Ⅹ]).*?)<br>', t)
         for i in examples:
             if re.search(r'(（[1-9]）|[Ⅰ-Ⅹ])', i):
@@ -47,9 +43,6 @@ for index, t in enumerate(tails):
         tmpexp.extend(tmps)
     examples=tmpexp
 
-    print(explains)
-    print(examples)
-    print()
     s=''
     for i in explains:
         s=s+i+'<br>'
@@ -59,4 +52,5 @@ for index, t in enumerate(tails):
     s=s+'\n'
     outFile.write(heads[index]+'\t'+s)
 outFile.close()
-    
+Path = os.path.join(os.getcwd(), 'wordslist2.txt')
+os.startfile(Path)
