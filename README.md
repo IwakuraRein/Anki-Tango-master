@@ -4,6 +4,10 @@
 
 环境需求：python、pykakasi 库。
 
+参见：
+* [在 Anki 中自动添加日语真人发音](https://card.weibo.com/article/m/show/id/2309404535379217744226?_wb_client_=1)（作者：柏木优）
+* [在 Anki 中新增卡片类型](https://blog.csdn.net/qq_34260368/article/details/78268080)（作者：yoohm）
+
 ## 用法
 
 先准备好要生成的单词列表，每行一个。打开 generate.py，将单词列表输入，在最后一行后写一行 “\END”，按回车键。例如：
