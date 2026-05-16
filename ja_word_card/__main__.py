@@ -21,6 +21,7 @@ try:
 except:
     ctypes.windll.user32.SetProcessDPIAware()
 
+
 def default_icon_path() -> Path:
     return Path(__file__).resolve().parent.parent / "logo.ico"
 
@@ -95,10 +96,10 @@ class WordCardApp(tk.Tk):
         self.geometry("980x1024")
         self.minsize(640, 640)
         try:
-            self.scale_factor=ctypes.windll.shcore.GetScaleFactorForDevice(0)
+            self.scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
         except:
-            self.scale_factor=1
-        self.tk.call('tk', 'scaling', self.scale_factor / 75)
+            self.scale_factor = 1
+        self.tk.call("tk", "scaling", self.scale_factor / 75)
 
         self.output_formatters = {
             JsonFormatter.name: JsonFormatter(),
@@ -108,9 +109,7 @@ class WordCardApp(tk.Tk):
         self.backend_var = tk.StringVar(
             value="SQLite" if "SQLite" in self.backends else next(iter(self.backends))
         )
-        self.output_format_var = tk.StringVar(
-            value=next(iter(self.output_formatters))
-        )
+        self.output_format_var = tk.StringVar(value=next(iter(self.output_formatters)))
         self.backend_param_vars: dict[str, tk.Variable] = {}
         self.backend_param_types: dict[str, type[Any]] = {}
         self.backend_optional_params: set[str] = set()
@@ -243,7 +242,9 @@ class WordCardApp(tk.Tk):
             if backend_class is None:
                 return
 
-            for row, parameter in enumerate(self._backend_init_parameters(backend_class)):
+            for row, parameter in enumerate(
+                self._backend_init_parameters(backend_class)
+            ):
                 value_type, optional = parameter_type(parameter)
                 self.backend_param_types[parameter.name] = value_type
                 if optional:
@@ -472,9 +473,13 @@ class WordCardApp(tk.Tk):
                     found[word] = query.query(word)
                 except Exception as e:
                     failed.append(word)
-                    self.query_queue.put(("progress", (done, len(found), len(failed), str(e))))
+                    self.query_queue.put(
+                        ("progress", (done, len(found), len(failed), str(e)))
+                    )
                 else:
-                    self.query_queue.put(("progress", (done, len(found), len(failed), None)))
+                    self.query_queue.put(
+                        ("progress", (done, len(found), len(failed), ""))
+                    )
 
             self.query_queue.put(("done", (found, failed)))
         except Exception as error:
@@ -502,9 +507,7 @@ class WordCardApp(tk.Tk):
                 self.progress_var.set(total)
                 self._set_text(self.output_text, formatter.format_many(found))
                 self._set_text(self.failed_text, "\n".join(failed))
-                self.status_var.set(
-                    f"Done. {len(found)} found, {len(failed)} faild."
-                )
+                self.status_var.set(f"Done. {len(found)} found, {len(failed)} faild.")
                 self._set_query_running(False)
                 should_continue = False
             elif message == "error":

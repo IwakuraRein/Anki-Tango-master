@@ -43,16 +43,11 @@ class SQLiteQuery(BaseQuery):
 
         try:
             with sqlite3.connect(self.database_path) as connection:
-                tables = {
-                    row[0]
-                    for row in connection.execute(
-                        """
+                tables = {row[0] for row in connection.execute("""
                         SELECT name
                         FROM sqlite_master
                         WHERE type = 'table'
-                        """
-                    )
-                }
+                        """)}
         except sqlite3.Error:
             return False
 

@@ -31,17 +31,18 @@ _USER_PROMPT = """
 Word: {word}
 """
 
+
 class OpenAIQuery(BaseQuery):
-    name = 'OpenAI'
+    name = "OpenAI"
 
     def __init__(
         self,
         model: str | None = None,
-        entrypoint: str = 'http://localhost:8080/v1',
+        entrypoint: str = "http://localhost:8080/v1",
         api_key: str | None = None,
         source_lang: str = "Japanese",
         target_lang: str = "Simplified Chinese",
-        temperature = 0.5,
+        temperature=0.5,
         is_multi_model: bool = False,
     ) -> None:
         self.model = model
@@ -57,12 +58,17 @@ class OpenAIQuery(BaseQuery):
         )
         self._messages = [
             {
-                "role": "system", 
-                "content": self._system_prompt if not self.is_multi_model else
-                    [{
-                        "type": "text",
-                        "text": self._system_prompt,
-                    }],
+                "role": "system",
+                "content": (
+                    self._system_prompt
+                    if not self.is_multi_model
+                    else [
+                        {
+                            "type": "text",
+                            "text": self._system_prompt,
+                        }
+                    ]
+                ),
             }
         ]
         try:
@@ -75,33 +81,37 @@ class OpenAIQuery(BaseQuery):
 
     def query(self, text: str) -> DictWord:
         if not self._client:
-            raise RuntimeError(
-                "OpenAI client is not loaded."
-            )
+            raise RuntimeError("OpenAI client is not loaded.")
         user_prompt = _USER_PROMPT.format(
             word=text,
         )
         user_message = {
             "role": "user",
-            "content":
-                user_prompt if not self.is_multi_model else 
-                    [{
+            "content": (
+                user_prompt
+                if not self.is_multi_model
+                else [
+                    {
                         "type": "text",
                         "text": user_prompt,
-                    }],
+                    }
+                ]
+            ),
         }
         self._messages.append(user_message)
         response = self._client.chat.completions.parse(
             model=self.model,
             messages=self._messages,
             response_format=DictWord,
-            temperature=self.temperature
+            temperature=self.temperature,
         )
 
         message = response.choices[0].message
 
         if message.parsed is None:
-            raise ValueError(f"OpenAI returned an invalid dictionary response for: {text}")
+            raise ValueError(
+                f"OpenAI returned an invalid dictionary response for: {text}"
+            )
 
         self._messages.extend(
             [

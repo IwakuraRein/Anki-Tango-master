@@ -26,8 +26,7 @@ class AnkiFormatter(BaseFormatter):
 
     def _format_explanations(self, word: DictWord) -> str:
         items = "".join(
-            f"<li>{escape(explanation.text)}</li>"
-            for explanation in word.explanations
+            f"<li>{escape(explanation.text)}</li>" for explanation in word.explanations
         )
         return f"<ol>{items}</ol>"
 
@@ -41,9 +40,11 @@ class AnkiFormatter(BaseFormatter):
             for explanation in word.explanations
         )
 
-    def _format_example_group(self, explanation: DictExplanation, include_explanation: bool) -> str:
+    def _format_example_group(
+        self, explanation: DictExplanation, include_explanation: bool
+    ) -> str:
         if len(explanation.examples) == 0:
-            return ''
+            return ""
         items = "".join(
             "<li>"
             f"{escape(example.original_text)}"
@@ -54,7 +55,10 @@ class AnkiFormatter(BaseFormatter):
         )
         res = f"<ul>{items}</ul>"
         if include_explanation:
-            res = f'<small>{escape(explanation.text)}</small>' + f'<div style="margin-left: 10px;">{res}</div>'
+            res = (
+                f"<small>{escape(explanation.text)}</small>"
+                + f'<div style="margin-left: 10px;">{res}</div>'
+            )
         return res
 
     def _cell(self, value: str) -> str:
