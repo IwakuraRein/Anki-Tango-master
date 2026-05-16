@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "ja_word_card"
 version = "0.1.0"
 description = "Japanese word card query and formatter GUI."
+readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
 dependencies = [
