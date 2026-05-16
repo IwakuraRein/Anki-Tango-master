@@ -3,10 +3,7 @@ from __future__ import annotations
 import json
 from collections.abc import Mapping
 
-try:
-    from query import DictWord
-except ImportError:
-    from ..query import DictWord
+from ..query import DictWord
 
 from .base import BaseFormatter
 

@@ -13,12 +13,8 @@ from tkinter import filedialog, messagebox, ttk
 from types import UnionType
 from typing import Any, get_args, get_origin
 
-try:
-    from output_formater import AnkiFormatter, JsonFormatter
-    from query import BaseQuery, DictWord
-except ImportError:
-    from .output_formater import AnkiFormatter, JsonFormatter
-    from .query import BaseQuery, DictWord
+from .output_formater import AnkiFormatter, JsonFormatter
+from .query import BaseQuery, DictWord
 
 try:
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
@@ -32,7 +28,7 @@ def default_icon_path() -> Path:
 def app_config_path() -> Path:
     appdata = os.getenv("APPDATA")
     base_path = Path(appdata) if appdata else Path.home() / "AppData" / "Roaming"
-    return base_path / "ja-word-card" / "config.ini"
+    return base_path / "ja_word_card" / "config.ini"
 
 
 def parse_words(text: str) -> list[str]:

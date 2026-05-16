@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ja_word_card"
+version = "0.1.0"
+description = "Japanese word card query and formatter GUI."
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = [
+    "openai==2.37.0",
+    "pydantic==2.13.4",
+    "pykakasi==2.3.0",
+]
+
+[project.scripts]
+ja_word_card = "ja_word_card.word_card:main"
+
+[tool.setuptools]
+packages = [
+    "ja_word_card",
+    "ja_word_card.output_formater",
+    "ja_word_card.query",
+]

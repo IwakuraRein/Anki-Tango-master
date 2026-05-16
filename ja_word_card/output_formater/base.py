@@ -3,10 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Mapping
 
-try:
-    from query import DictWord
-except ImportError:
-    from ..query import DictWord
+from ..query import DictWord
 
 
 class BaseFormatter(ABC):

@@ -4,6 +4,9 @@ from .sqlite_query import SQLiteQuery
 
 __all__ = [
     "BaseQuery",
+    "DictExample",
+    "DictExplanation",
+    "DictWord",
     "OpenAIQuery",
     "SQLiteQuery",
 ]

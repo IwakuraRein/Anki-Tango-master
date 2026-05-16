@@ -3,10 +3,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from html import escape
 
-try:
-    from query import DictExplanation, DictWord
-except ImportError:
-    from ..query import DictExplanation, DictWord
+from ..query import DictExplanation, DictWord
 
 from .base import BaseFormatter
 
