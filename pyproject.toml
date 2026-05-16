@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ja_word_card = "ja_word_card.word_card:main"
+ja_word_card = "ja_word_card.__main__:main"
 
 [tool.setuptools]
 packages = [

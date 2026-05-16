@@ -38,7 +38,7 @@ class OpenAIQuery(BaseQuery):
 
     def __init__(
         self,
-        model: str,
+        model: str | None = None,
         entrypoint: str = 'http://localhost:8080/v1',
         api_key: str | None = None,
         source_lang: str = "Japanese",
