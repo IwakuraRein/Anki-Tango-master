@@ -1,0 +1,3 @@
+openai==2.37.0
+pydantic==2.13.4
+pykakasi==2.3.0
