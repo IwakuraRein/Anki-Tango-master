@@ -470,9 +470,11 @@ class WordCardApp(tk.Tk):
             for done, word in enumerate(words, start=1):
                 try:
                     found[word] = query.query(word)
-                except Exception:
+                except Exception as e:
                     failed.append(word)
-                self.query_queue.put(("progress", (done, len(found), len(failed))))
+                    self.query_queue.put(("progress", (done, len(found), len(failed), str(e))))
+                else:
+                    self.query_queue.put(("progress", (done, len(found), len(failed), None)))
 
             self.query_queue.put(("done", (found, failed)))
         except Exception as error:
@@ -488,12 +490,12 @@ class WordCardApp(tk.Tk):
                 break
 
             if message == "progress":
-                done, found_count, failed_count = payload
+                done, found_count, failed_count, extra_msg = payload
                 self.progress_var.set(done)
                 self.status_var.set(
                     "Querying "
                     f"{done}/{total} word(s). "
-                    f"{found_count} found, {failed_count} failed ."
+                    f"{found_count} found, {failed_count} failed. {extra_msg}"
                 )
             elif message == "done":
                 found, failed = payload
