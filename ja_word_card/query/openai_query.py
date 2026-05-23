@@ -56,21 +56,6 @@ class OpenAIQuery(BaseQuery):
             source_lang=self.source_lang,
             target_lang=self.target_lang,
         )
-        self._messages = [
-            {
-                "role": "system",
-                "content": (
-                    self._system_prompt
-                    if not self.is_multi_model
-                    else [
-                        {
-                            "type": "text",
-                            "text": self._system_prompt,
-                        }
-                    ]
-                ),
-            }
-        ]
         try:
             self._client = OpenAI(base_url=entrypoint, api_key=self.api_key)
         except:
@@ -82,6 +67,19 @@ class OpenAIQuery(BaseQuery):
     def query(self, text: str) -> DictWord:
         if not self._client:
             raise RuntimeError("OpenAI client is not loaded.")
+        system_message = {
+            "role": "system",
+            "content": (
+                self._system_prompt
+                if not self.is_multi_model
+                else [
+                    {
+                        "type": "text",
+                        "text": self._system_prompt,
+                    }
+                ]
+            ),
+        }
         user_prompt = _USER_PROMPT.format(
             word=text,
         )
@@ -98,10 +96,9 @@ class OpenAIQuery(BaseQuery):
                 ]
             ),
         }
-        self._messages.append(user_message)
         response = self._client.chat.completions.parse(
             model=self.model,
-            messages=self._messages,
+            messages=[system_message, user_message],
             response_format=DictWord,
             temperature=self.temperature,
         )
@@ -112,15 +109,5 @@ class OpenAIQuery(BaseQuery):
             raise ValueError(
                 f"OpenAI returned an invalid dictionary response for: {text}"
             )
-
-        self._messages.extend(
-            [
-                user_message,
-                {
-                    "role": "assistant",
-                    "content": message.content or message.parsed.model_dump_json(),
-                },
-            ]
-        )
 
         return message.parsed

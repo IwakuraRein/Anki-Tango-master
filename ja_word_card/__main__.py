@@ -16,14 +16,35 @@ from typing import Any, get_args, get_origin
 from .output_formater import AnkiFormatter, JsonFormatter
 from .query import BaseQuery, DictWord
 
-try:
-    ctypes.windll.shcore.SetProcessDpiAwareness(1)
-except:
-    ctypes.windll.user32.SetProcessDPIAware()
+WINDOWS_APP_ID = "ja_word_card.gui"
+
+
+def configure_windows_app() -> None:
+    if os.name != "nt":
+        return
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    except:
+        ctypes.windll.user32.SetProcessDPIAware()
+    try:
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(WINDOWS_APP_ID)
+    except Exception:
+        pass
+
+
+def asset_path(filename: str) -> Path:
+    package_path = Path(__file__).resolve().parent / filename
+    if package_path.is_file():
+        return package_path
+    return Path(__file__).resolve().parent.parent / filename
 
 
 def default_icon_path() -> Path:
-    return Path(__file__).resolve().parent.parent / "logo.ico"
+    return asset_path("logo.ico")
+
+
+def default_icon_image_path() -> Path:
+    return asset_path("logo.png")
 
 
 def app_config_path() -> Path:
@@ -209,11 +230,19 @@ class WordCardApp(tk.Tk):
 
     def _set_window_icon(self) -> None:
         icon_path = default_icon_path()
-        if not icon_path.is_file():
+        if icon_path.is_file():
+            try:
+                self.iconbitmap(str(icon_path))
+            except tk.TclError:
+                pass
+
+        image_path = default_icon_image_path()
+        if not image_path.is_file():
             return
 
         try:
-            self.iconbitmap(str(icon_path))
+            self._icon_image = tk.PhotoImage(file=str(image_path))
+            self.iconphoto(True, self._icon_image)
         except tk.TclError:
             pass
 
@@ -540,6 +569,7 @@ class WordCardApp(tk.Tk):
 
 
 def main() -> None:
+    configure_windows_app()
     app = WordCardApp()
     app.mainloop()
 

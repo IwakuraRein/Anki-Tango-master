@@ -24,3 +24,8 @@ packages = [
     "ja_word_card.output_formater",
     "ja_word_card.query",
 ]
+
+[tool.setuptools.package-data]
+ja_word_card = [
+    "logo.ico",
+]
